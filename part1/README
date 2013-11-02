@@ -1,0 +1,36 @@
+Grzegorz Kołakowski, gk291583
+
+Rozwiązanie zadania pierwszego
+
+I. Struktura rozwiązania
+
+Rozwiązanie składa się z plików:
+ - conway.c: Program w C, wczytujący planszę ze standardowego wejścia,
+   następnie wywołujący określoną liczbę razy funkcję w asemblerze
+   obliczającą kolejny stan planszy w "Grze w życie", następnie wypisuje
+   nowy stan planszy na standardowe wyjście.
+
+ - functions.asm: Plik asemblerowy zawierający funkcję next_state
+   wywoływaną przez program w C. Zawiera również dodatkowo funkcję
+   pomocniczą.
+
+ - Makefile
+
+II. Parametry programu, w tym ustalane na etapie kompilacji
+
+ - jedyny parametr przy uruchamianiu programu to liczba iteracji do wykonania.
+
+ - WIDTH, HEIGHT : szerokość i wysokość planszy.
+   Domyślne wartości 50, 60.
+
+III. Przykładowa kompilacja i uruchamianie programu
+
+make HEIGHT=20 WIDTH=20
+./conway 100 < ../tests/20x20/tumbler.in
+
+IV. Uwagi
+  - Wejściem dla programu jest plik zawierający tablicę zerojedynkową.
+  - Wyjściem programu tablica składająca się ze znaków dwóch rodzajów:
+    * . (kropka) - komórka martwa,
+    * O (duża litera o) - komórka żywa.
+  - Na wyjście wypisywane jest steps+1 plansz (bo również stan początkowy).

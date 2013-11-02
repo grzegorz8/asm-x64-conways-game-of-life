@@ -1,0 +1,66 @@
+Grzegorz Kołakowski, gk291583
+
+Rozwiązanie zadania pierwszego
+
+I. Struktura rozwiązania
+
+Rozwiązanie składa się z plików:
+ - conway.c: Program w C, wczytujący planszę ze standardowego wejścia,
+   następnie wywołujący określoną liczbę razy funkcję w asemblerze
+   obliczającą kolejny stan planszy w "Grze w życie", następnie wypisuje
+   nowy stan planszy na standardowe wyjście.
+
+ - functions.asm: Plik asemblerowy zawierający funkcję next_state
+   wywoływaną przez program w C.
+ 
+ - check_sse.asm: Plik asemblerowy z funkcją check_sse sprawdzającą czy używane
+   rozszerzenia sse są wspierane przez maszynę.
+
+ - Makefile
+
+II. Parametry programu, w tym ustalane na etapie kompilacji
+
+ - jedyny parametr przy uruchamianiu programu to liczba iteracji do wykonania.
+
+ - WIDTH, HEIGHT : szerokość i wysokość planszy.
+   Domyślne wartości 50, 60.
+
+III. Przykładowa kompilacja i uruchamianie programu
+
+make HEIGHT=20 WIDTH=20
+./conway 100 < ../tests/20x20/tumbler.in
+
+IV. Uwagi
+  - Wejściem dla programu jest plik zawierający tablicę zerojedynkową.
+  - Wyjściem programu tablica składająca się ze znaków dwóch rodzajów:
+    * . (kropka) - komórka martwa,
+    * O (duża litera o) - komórka żywa.
+  - Na wyjście wypisywane jest steps+1 plansz (bo również stan początkowy).
+  
+
+V. Sposób wykorzystania SSE
+
+Korzystam z SSE i SSE2.
+
+Algorytm polega na tym, że za pomocą wektorów xmm wyliczam nową wartość dla
+czterech sąsiednich pól z wiersza. Sumuję wartości ośmiu wektorów znajdujących
+się dookoła obliczanego wektora (+/- 1 do współrzędnych x i y [wszystkie 8
+kombinacji]).
+
+Dla ułatwienia (nie trzeba sprawdzać czy sąsiednie pola mieszczą się w tablicy)
+i wyrównania danych (żeby używać w miarę możliwości korzystać z instrukcji
+movaps) rozszerzam planszę z góry i z dołu o jeden, z lewej o 4, z prawej
+o 4 + dopełnienie szerokości oryginalnej planszy do wielokrotności 4.
+
+Marginesy są wyzerowane. Jednak jeśli szerokość oryginalnej planszy nie jest
+podzielne przez 4, to może się zdarzyć, że na marginesie z prawej zostaną
+zapisane jedynki. Wówczas gdy dojdziemy do końca wiersza, zerujemy fragment
+marginesu narażony na wpisanie jedynek, które mogłbyby popsuć kolejne iteracje
+programu.
+
+VI. Pomiary czasów
+
+Dla planszy 50x60 (gosper_glider_gun.in), 10.000 iteracji (na students):
+wersja "standardowa":   959 ms
+wersja z sse:           130 ms
+przyspieszenie:         7.37x

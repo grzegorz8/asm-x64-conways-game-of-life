@@ -1,0 +1,12 @@
+Grzegorz Kołakowski, gk291583
+
+ * Katalog part1 zawiera zmodyfikowane rozwiązania zadania pierwszego (dodane
+   liczenie czasu).
+   
+ * Katalog part2 zawiera rozwiązanie oparte na SSE.
+ 
+ * Katalog tests z przykładowymi ustawieniami początkowymi (przykłady ze
+   strony: http://www.bitstorm.org/gameoflife/). Zawiera trzy podkatalogi z
+   testami o różnych rozmiarach planszy.
+ 
+ Oba katalogi zawierają własne pliki README.
